@@ -1,0 +1,12 @@
+body {
+  font-family: 'Sarasa Mono SC', Verdana;
+  height: 100%;
+}
+#timeline {
+	height: calc(100% - 60px);
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select:none;
+  user-select:none;
+  -o-user-select:none;
+}
