@@ -3,12 +3,10 @@
   <meta charset="UTF-8">
   <link rel="stylesheet" href="global.css">
   <script src="https://timeline-api.gcc3.com/timeline/2.3.1/timeline-api.js" type="text/javascript"></script>
-  <script src="timeline.config.js" type="text/javascript"></script>
+  <script src="config.js" type="text/javascript"></script>
   <script src="data.js" type="text/javascript"></script>
 
-  <script>
-    var title = "PHILOSOPHY & SCIENCE HISTORY TIMELINE";
-    
+  <script>   
     // Set cookie value
     function setCookie(name, value) {
       document.cookie = name + '=' + value + '; path=/';
@@ -42,8 +40,6 @@
 <body onload="onLoad()" onresize="onResize()">
   <div style="font-size: small; margin-top: 10px; display: flex; height: 20px">
     <div id="title" style="margin-bottom: 3px">HISTORY TIMELINE</div>
-<!--     <a style="margin-left: 7px;margin-top: 1px;color:#666666;cursor: pointer; font-size: x-small" onclick="setLang('en')">English</a>
-    <a style="margin-left: 5px;margin-top: 1px;color:#666666;cursor: pointer; font-size: x-small" onclick="setLang('zh')">中文</a> -->
   </div>
   
   <div id="timeline" style="border: 1px solid #aaa; font-size: x-small;"></div>

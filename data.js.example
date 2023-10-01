@@ -1,0 +1,71 @@
+
+// Renaissance
+var tl_main = {
+    "dateTimeFormat": "iso8601",
+    "events": [
+        {
+            "start": "1350",
+            "end": "1650",
+            "title": "Renaissance Period (14th-17th Century)",
+            "description": "Renaissance",
+            "isDuration": true,
+            "textColor": "black",
+            "color": "#31B404"
+        },
+        {
+            "start": "1440",
+            "title": "Gutenberg's movable type printing",
+            "description": "Johannes Gutenberg"
+        },
+        {
+            "start": "1475",
+            "title": "Michelangelo (1475-1564)",
+            "description": "Michelangelo, a distinguished polymath during the Renaissance period"
+        },
+        {
+            "start": "1452",
+            "title": "Leonardo da Vinci (1452-1519)",
+            "description": "Leonardo da Vinci"
+        },
+        {
+            "start": "1483",
+            "title": "Raphael (1483-1520)",
+            "description": "Raffaello Sanzio, Italian painter"
+        },
+        {
+            "start": "1543",
+            "title": "Copernicus' On the Revolutions of the Heavenly Spheres",
+            "description": ""
+        },
+        {
+            "start": "1492-10-12",
+            "title": "Columbus discovers the New World",
+            "description": ""
+        },
+        {
+            "start": "1521",
+            "title": "Magellan completes circumnavigation",
+            "description": "Ferdinand Magellan, Portuguese"
+        },
+        {
+            "start": "1473",
+            "title": "Copernicus (1473-1543)",
+            "description": "Nicolaus Copernicus"
+        },
+        {
+            "start": "1564",
+            "title": "Galileo Galilei (1564-1642)",
+            "description": "Galileo Galilei"
+        },
+        {
+            "start": "1514",
+            "title": "Vesalius (1514-1564)",
+            "description": "Andreas Vesalius, a Belgian, an anatomist, and doctor during the Renaissance period. His book, 'De humani corporis fabrica' (On the Fabric of the Human Body), is considered one of the authoritative works on human anatomy. Vesalius is considered the founder of modern human anatomy."
+        },
+        {
+            "start": "1564",
+            "title": "Shakespeare (1564-1616)",
+            "description": "William Shakespeare"
+        }
+    ]
+}
