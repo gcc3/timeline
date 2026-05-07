@@ -1,3 +1,5 @@
 config.js
 data.js
 data.xml
+.vscode
+.DS_Store
