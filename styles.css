@@ -49,7 +49,7 @@ a {
 #lang-switch {
   position: relative;
   font-size: x-small;
-  align-self: flex-start;
+  align-self: center;
 }
 
 #lang-current {
