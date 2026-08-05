@@ -144,3 +144,63 @@ a {
   line-height: 1;
   cursor: pointer;
 }
+
+/* Plain text like the language switcher, not a button */
+#help-button {
+  margin-left: 4px;
+  align-self: center;
+  color: #555;
+  font-size: 10px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+#help-button:hover {
+  color: #000;
+}
+
+#help-modal {
+  display: none; /* app.js switches this to flex */
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2000; /* above the timeline's own popups */
+  background: rgba(0, 0, 0, 0.3);
+  justify-content: center;
+  align-items: center;
+}
+
+#help-panel {
+  background: #fff;
+  border: 1px solid #aaa;
+  padding: 10px 12px;
+  font-size: 11px; /* a notch above the x-small page chrome */
+  min-width: 180px;
+}
+
+#help-title {
+  margin-bottom: 6px;
+}
+
+#help-list {
+  font-size: 11px; /* quirks-mode tables don't inherit the panel's size */
+}
+
+#help-list td {
+  padding: 3px 0;
+}
+
+#help-list td:first-child {
+  padding-right: 14px;
+  white-space: nowrap;
+}
+
+/* Keys as plain text, not key-cap lookalikes */
+#help-list kbd {
+  font-family: inherit;
+  font-size: 100%;
+  color: #555;
+}

@@ -87,6 +87,7 @@ function onDataLoaded() {
   document.getElementById("zoom-out").onclick = function () { zoomTimeline(false); };
   updateScaleBar();
   initTouch();
+  initHelp();
 
   // Data is loaded and the timeline is laid out — remove the loading screen
   var loading = document.getElementById("loading");
@@ -235,6 +236,94 @@ function initTouch() {
   }
   el.addEventListener("touchend", onTouchEnd, { passive: false });
   el.addEventListener("touchcancel", onTouchEnd, { passive: false });
+}
+
+// ---- Keyboard shortcuts and help modal ----
+
+var helpTexts = {
+  en: { title: "Keyboard shortcuts", zoomIn: "Zoom in", zoomOut: "Zoom out",
+        move: "Move the timeline", page: "Move one screen",
+        ends: "Jump to the first / last event", button: "Shortcut help" },
+  zh: { title: "键盘快捷键", zoomIn: "放大", zoomOut: "缩小",
+        move: "移动时间线", page: "移动一屏",
+        ends: "跳到最早 / 最晚事件", button: "快捷键帮助" },
+  ja: { title: "キーボードショートカット", zoomIn: "拡大", zoomOut: "縮小",
+        move: "タイムラインを移動", page: "1画面分移動",
+        ends: "最初 / 最後のイベントへ移動", button: "ショートカットヘルプ" }
+};
+
+// PageUp/PageDown move the view by one screen of the main event band.
+// _moveEther is what the library's own arrow-key and mouse-drag handlers
+// call; positive distances scroll back in time, and synced bands follow.
+function scrollScreen(forward) {
+  if (!tl) return;
+  var band = tl.getBand(SCALE_BAND);
+  band._moveEther(forward ? -band._viewLength : band._viewLength);
+}
+
+// Home/End center the view on the first/last event in the data
+function scrollToEdge(last) {
+  if (!tl) return;
+  var eventSource = tl.getBand(0).getEventSource();
+  var date = last ? eventSource.getLatestDate() : eventSource.getEarliestDate();
+  if (date) tl.getBand(0).setCenterVisibleDate(date);  // synced bands follow
+}
+
+function initHelp() {
+  var texts = helpTexts[lang] || helpTexts.en;
+  var modal = document.getElementById("help-modal");
+  var button = document.getElementById("help-button");
+
+  button.title = texts.button;
+  document.getElementById("help-title").innerText = texts.title;
+
+  // Arrow-key scrolling is the library's own; it works once a click or tap
+  // has put focus on a band
+  var rows = [
+    [["+"], texts.zoomIn],
+    [["-"], texts.zoomOut],
+    [["←", "→"], texts.move],
+    [["PgUp", "PgDn"], texts.page],
+    [["Home", "End"], texts.ends]
+  ];
+  var list = document.getElementById("help-list");
+  for (var i = 0; i < rows.length; i++) {
+    var tr = document.createElement("tr");
+    var keys = document.createElement("td");
+    for (var k = 0; k < rows[i][0].length; k++) {
+      if (k > 0) keys.appendChild(document.createTextNode(" / "));
+      var kbd = document.createElement("kbd");
+      kbd.innerText = rows[i][0][k];
+      keys.appendChild(kbd);
+    }
+    var desc = document.createElement("td");
+    desc.innerText = rows[i][1];
+    tr.appendChild(keys);
+    tr.appendChild(desc);
+    list.appendChild(tr);
+  }
+
+  button.onclick = function () {
+    modal.style.display = "flex";
+  };
+  modal.onclick = function (e) {
+    if (e.target === modal) modal.style.display = "none";  // click outside the panel
+  };
+
+  document.addEventListener("keydown", function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;  // leave browser shortcuts alone
+    if (e.key === "+" || e.key === "=") zoomTimeline(true);
+    else if (e.key === "-" || e.key === "_") zoomTimeline(false);
+    else if (e.key === "PageUp" || e.key === "PageDown") {
+      scrollScreen(e.key === "PageDown");
+      e.preventDefault();  // the browser would scroll the page instead
+    } else if (e.key === "Home" || e.key === "End") {
+      scrollToEdge(e.key === "End");
+      e.preventDefault();
+    } else if (e.key === "Escape") {
+      modal.style.display = "none";
+    }
+  });
 }
 
 var resizeTimerID = null;
