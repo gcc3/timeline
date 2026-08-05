@@ -21,6 +21,6 @@ Then open `index.html` in a browser.
 Languages
 ---------
 
-The links at the top right switch the language; they are generated from `langs.js`.  
+The dropdown at the top right switches the language; it is generated from `langs.js`.  
 The choice is stored in localStorage (`locale`); the matching `data/<lang>.js` is loaded on reload (default: `en`).  
 To add a language, create `data/<lang>.js` and run `./setup.sh` again — it rescans the `data/` folder, no list to edit by hand.  

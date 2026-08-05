@@ -21,15 +21,35 @@ function onLoad() {
   document.getElementById("title").innerText = title;
   document.title = title;
 
-  // Build the language switcher from langs (langs.js)
+  // Build the language dropdown from langs (langs.js):
+  // a plain-text label that toggles a menu of languages
   var sw = document.getElementById("lang-switch");
+
+  var current = document.createElement("span");
+  current.id = "lang-current";
+  current.innerText = lang.toUpperCase();
+  sw.appendChild(current);
+
+  var menu = document.createElement("div");
+  menu.id = "lang-menu";
   for (var i = 0; i < langs.length; i++) {
-    var a = document.createElement("a");
-    a.href = "javascript:setLang('" + langs[i] + "')";
-    a.innerText = langs[i].toUpperCase();
-    if (langs[i] === lang) a.className = "active";
-    sw.appendChild(a);
+    (function (code) {
+      var item = document.createElement("a");
+      item.innerText = code.toUpperCase();
+      if (code === lang) item.className = "active";
+      item.onclick = function () { setLang(code); };
+      menu.appendChild(item);
+    })(langs[i]);
   }
+  sw.appendChild(menu);
+
+  current.onclick = function (e) {
+    e.stopPropagation();
+    menu.style.display = menu.style.display === "block" ? "none" : "block";
+  };
+  document.addEventListener("click", function () {
+    menu.style.display = "none";
+  });
 
   tl = tl_init();
 }
