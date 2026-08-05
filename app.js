@@ -85,6 +85,18 @@ function onDataLoaded() {
 
   document.getElementById("zoom-in").onclick = function () { zoomTimeline(true); };
   document.getElementById("zoom-out").onclick = function () { zoomTimeline(false); };
+
+  // iOS Safari zooms the page into small controls on quick taps (double-tap
+  // zoom, tiny-target disambiguation) instead of clicking them. Claim taps
+  // on the +/− buttons before Safari does and issue the click ourselves.
+  document.getElementById("zoom-buttons").addEventListener("touchend", function (e) {
+    var btn = e.target.closest ? e.target.closest("button") : null;
+    if (btn && e.cancelable) {
+      e.preventDefault();
+      btn.click();
+    }
+  }, { passive: false });
+
   updateScaleBar();
   initTouch();
 
@@ -164,19 +176,18 @@ function updateScaleBar() {
 // SIMILE Timeline predates touch screens: the bands only listen for mouse
 // events, so on mobile they ignore drag gestures entirely. Replay
 // single-finger touches as synthetic mouse events on the touched element
-// (they bubble up to the band's handlers), and step the zoom on two-finger
-// pinches. styles.css sets touch-action: none on #timeline so the browser
-// doesn't claim these gestures for page scrolling first.
+// (they bubble up to the band's handlers). Touch gestures only ever pan:
+// the zoom level changes through the +/− buttons alone. styles.css sets
+// touch-action: none on #timeline so the browser doesn't claim these
+// gestures for page scrolling or zooming first.
 
 var TAP_SLOP_PX = 8;    // finger jitter below this still counts as a tap
-var PINCH_STEP = 1.3;   // finger distance ratio that triggers one zoom step
 
 function initTouch() {
   var el = document.getElementById("timeline");
   var target = null;    // element the touch started on; null = not dragging
   var moved = false;    // exceeded TAP_SLOP_PX, so not a tap
   var startX = 0, startY = 0;
-  var pinchDist = 0;    // finger distance at the last zoom step; 0 = not pinching
 
   function fire(type, touch) {
     target.dispatchEvent(new MouseEvent(type, {
@@ -187,37 +198,23 @@ function initTouch() {
     }));
   }
 
-  function dist(touches) {
-    var dx = touches[0].clientX - touches[1].clientX;
-    var dy = touches[0].clientY - touches[1].clientY;
-    return Math.sqrt(dx * dx + dy * dy);
-  }
-
   el.addEventListener("touchstart", function (e) {
     if (e.touches.length === 1) {
       target = e.target;
       moved = false;
       startX = e.touches[0].clientX;
       startY = e.touches[0].clientY;
-      pinchDist = 0;
       fire("mousedown", e.touches[0]);
-    } else if (e.touches.length === 2) {
-      // A second finger turns the drag into a pinch
-      if (target) fire("mouseup", e.touches[0]);
+    } else if (target) {
+      // A second finger ends the drag; multi-touch is deliberately ignored
+      fire("mouseup", e.touches[0]);
       target = null;
-      pinchDist = dist(e.touches);
     }
   }, { passive: true });
 
   el.addEventListener("touchmove", function (e) {
     e.preventDefault();  // dragging pans the timeline, never scrolls the page
-    if (pinchDist > 0 && e.touches.length === 2) {
-      var d = dist(e.touches);
-      if (d > pinchDist * PINCH_STEP || d < pinchDist / PINCH_STEP) {
-        zoomTimeline(d > pinchDist);
-        pinchDist = d;
-      }
-    } else if (target && e.touches.length === 1) {
+    if (target && e.touches.length === 1) {
       var t = e.touches[0];
       if (Math.abs(t.clientX - startX) > TAP_SLOP_PX ||
           Math.abs(t.clientY - startY) > TAP_SLOP_PX) moved = true;
@@ -236,7 +233,6 @@ function initTouch() {
       if (e.cancelable) e.preventDefault();
     }
     target = null;
-    pinchDist = 0;
   }
   el.addEventListener("touchend", onTouchEnd, { passive: false });
   el.addEventListener("touchcancel", onTouchEnd, { passive: false });
