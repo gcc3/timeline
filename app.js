@@ -9,15 +9,27 @@ function setLang(lang) {
   location.reload();
 }
 
-// Resolve current language and load its data file (data/<lang>.js)
+// Resolve current language; its data file (data/<lang>.js) is loaded in onLoad
 if (typeof langs === 'undefined') var langs = ['en'];  // normally defined in langs.js (run setup.sh)
 var lang = getLang();
 if (langs.indexOf(lang) === -1) lang = 'en';
 document.documentElement.lang = lang;
-document.write('<script src="data/' + lang + '.js" type="text/javascript"><\/script>');
 
 var tl = null;
 function onLoad() {
+  // The data file can be large, so load it asynchronously: the loading screen
+  // (#loading) paints first, then onDataLoaded builds the timeline.
+  var script = document.createElement("script");
+  script.src = "data/" + lang + ".js";
+  script.onload = onDataLoaded;
+  script.onerror = function () {
+    var loading = document.getElementById("loading");
+    if (loading) loading.innerText = "Failed to load data/" + lang + ".js";
+  };
+  document.head.appendChild(script);
+}
+
+function onDataLoaded() {
   document.getElementById("title").innerText = title;
 
   // SimileAjax.History restores its own copy of document.title asynchronously,
@@ -58,6 +70,10 @@ function onLoad() {
   });
 
   tl = tl_init();
+
+  // Data is loaded and the timeline is laid out — remove the loading screen
+  var loading = document.getElementById("loading");
+  if (loading) loading.parentNode.removeChild(loading);
 }
 
 var resizeTimerID = null;
@@ -66,7 +82,7 @@ function onResize() {
   if (resizeTimerID == null) {
     resizeTimerID = window.setTimeout(function () {
       resizeTimerID = null;
-      tl.layout();
+      if (tl) tl.layout();  // null until the data has loaded
     }, 500);
   }
 }

@@ -8,6 +8,36 @@ body:lang(ja) {
   font-family: Verdana, "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans CJK JP", sans-serif;
 }
 
+#loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: x-small;
+  color: #555;
+}
+
+#loading-spinner {
+  width: 24px;
+  height: 24px;
+  margin-bottom: 8px;
+  border: 3px solid #ddd;
+  border-top-color: #555;
+  border-radius: 50%;
+  animation: loading-spin 0.8s linear infinite;
+}
+
+@keyframes loading-spin {
+  to { transform: rotate(360deg); }
+}
+
 #lang-switch {
   position: relative;
   font-size: x-small;

@@ -12,6 +12,13 @@
 </head>
 
 <body onload="onLoad()" onresize="onResize()">
+  <!-- Covers the page while the data file downloads and the timeline is
+       built; removed at the end of onDataLoaded() in app.js. -->
+  <div id="loading">
+    <div id="loading-spinner"></div>
+    <div>Loading...</div>
+  </div>
+
   <div style="font-size: small; margin-top: 10px; display: flex; height: 20px">
     <div id="title" style="margin-bottom: 3px">HISTORY TIMELINE</div>
     <div id="lang-switch" style="margin-left: auto"></div>
