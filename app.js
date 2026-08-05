@@ -177,6 +177,17 @@ function initTouch() {
   var moved = false;    // exceeded TAP_SLOP_PX, so not a tap
   var startX = 0, startY = 0;
 
+  // Each band hides an <input type="text"> (in .timeline-band-input) and
+  // focuses it on mouseup so arrow keys can scroll the timeline — but on iOS
+  // focusing a text input pops up the software keyboard on every tap.
+  // readonly + inputmode="none" suppress the keyboard while the input still
+  // takes focus and key events, so desktop arrow-key scrolling keeps working.
+  var inputs = el.querySelectorAll(".timeline-band-input input");
+  for (var i = 0; i < inputs.length; i++) {
+    inputs[i].readOnly = true;
+    inputs[i].setAttribute("inputmode", "none");
+  }
+
   function fire(type, touch) {
     target.dispatchEvent(new MouseEvent(type, {
       bubbles: true, cancelable: true, view: window,
