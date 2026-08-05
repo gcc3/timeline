@@ -1,6 +1,11 @@
 body {
-  font-family: "Sarasa Mono SC", Verdana;
+  font-family: Verdana, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   height: 100%;
+}
+
+/* Japanese UI prefers Japanese fonts for kanji glyph shapes */
+body:lang(ja) {
+  font-family: Verdana, "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans CJK JP", sans-serif;
 }
 
 #lang-switch {

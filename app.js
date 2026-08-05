@@ -13,6 +13,7 @@ function setLang(lang) {
 if (typeof langs === 'undefined') var langs = ['en'];  // normally defined in langs.js (run setup.sh)
 var lang = getLang();
 if (langs.indexOf(lang) === -1) lang = 'en';
+document.documentElement.lang = lang;
 document.write('<script src="data/' + lang + '.js" type="text/javascript"><\/script>');
 
 var tl = null;
