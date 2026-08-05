@@ -1,4 +1,6 @@
 
+var title = "HISTORY TIMELINE";
+
 // Renaissance
 var tl_main = {
     "dateTimeFormat": "iso8601",

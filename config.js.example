@@ -1,6 +1,4 @@
 
-
-var title = "PHILOSOPHY HISTORY TIMELINE";
 var init_date = "Jun 28 1500 00:00:00 GMT";
 
 function tl_init() {

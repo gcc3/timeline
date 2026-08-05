@@ -1,12 +1,32 @@
 body {
-  font-family: 'Sarasa Mono SC', Verdana;
+  font-family: "Sarasa Mono SC", Verdana;
   height: 100%;
 }
+
+#lang-switch {
+  display: flex;
+  gap: 8px;
+}
+
+#lang-switch a {
+  color: #888;
+  text-decoration: none;
+}
+
+#lang-switch a:hover {
+  color: #000;
+}
+
+#lang-switch a.active {
+  color: #000;
+  font-weight: bold;
+}
+
 #timeline {
-	height: calc(100% - 60px);
+  height: calc(100% - 60px);
   -moz-user-select: none;
   -webkit-user-select: none;
-  -ms-user-select:none;
-  user-select:none;
-  -o-user-select:none;
+  -ms-user-select: none;
+  user-select: none;
+  -o-user-select: none;
 }
