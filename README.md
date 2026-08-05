@@ -12,10 +12,26 @@ Setup
 Run `./setup.sh`. It creates local copies from the `.example` files and generates `langs.js`:
 
 - `config.js` — timeline bands and initial date.  
-- `data/<lang>.js` (e.g. `data/en.js`, `data/ja.js`, `data/zh.js`) — events and page title, one file per language.  
 - `langs.js` — generated list of available languages, scanned from the `data/` folder.  
 
+The event data is not in the repo. Write at least one `data/<lang>.js` yourself
+(e.g. `data/en.js`) holding the page title and events, then run `./setup.sh`
+again so `langs.js` picks it up. Without one the page loads empty.
+
 Then open `index.html` in a browser.  
+
+
+Events
+------
+
+A `data/<lang>.js` file sets `title` and groups its events into one or more
+named objects (`tl_renaissance`, `tl_world_war`, …), then lists those groups in a
+`timelines` array at the bottom. `config.js` loads every group in that array onto
+the one shared set of bands, so adding a group means defining it and appending it
+to `timelines` — no change to `config.js`.
+
+Dates are ISO 8601. BC years use astronomical numbering, where year 0 is 1 BC,
+so `"-0469"` is 470 BC.  
 
 
 Languages

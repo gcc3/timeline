@@ -19,7 +19,13 @@ document.write('<script src="data/' + lang + '.js" type="text/javascript"><\/scr
 var tl = null;
 function onLoad() {
   document.getElementById("title").innerText = title;
+
+  // SimileAjax.History restores its own copy of document.title asynchronously,
+  // so the localized title has to replace that copy as well as the live one.
   document.title = title;
+  if (window.SimileAjax && SimileAjax.History) {
+    SimileAjax.History._plainDocumentTitle = title;
+  }
 
   // Build the language dropdown from langs (langs.js):
   // a plain-text label that toggles a menu of languages

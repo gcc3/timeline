@@ -2,57 +2,62 @@
 var init_date = "Jun 28 1500 00:00:00 GMT";
 
 function tl_init() {
-  var eventSource = new Timeline.DefaultEventSource();
+    var eventSource = new Timeline.DefaultEventSource();
 
-  // Timezone
-  var date = new Date();
-  var timezoneNumber = date.getTimezoneOffset() * (-1) / 60; // For tokyo it's 9
+    // Timezone
+    var date = new Date();
+    var timezoneNumber = date.getTimezoneOffset() * (-1) / 60; // For tokyo it's 9
 
-  var bandInfos = [
-      // Band 1
-      Timeline.createBandInfo({
-          eventSource: eventSource,
-          date: init_date,
-          timeZone: timezoneNumber,
-          width: "15%",
-          intervalUnit: Timeline.DateTime.YEAR,
-          intervalPixels: 200
-      }),
+    var bandInfos = [
+        // Band 1
+        Timeline.createBandInfo({
+            eventSource: eventSource,
+            date: init_date,
+            timeZone: timezoneNumber,
+            width: "15%",
+            intervalUnit: Timeline.DateTime.YEAR,
+            intervalPixels: 200
+        }),
 
-      // Band 2
-      Timeline.createBandInfo({
-          eventSource: eventSource,
-          date: init_date,
-          timeZone: timezoneNumber,
-          width: "25%",
-          intervalUnit: Timeline.DateTime.DECADE,
-          intervalPixels: 100
-      }),
+        // Band 2
+        Timeline.createBandInfo({
+            eventSource: eventSource,
+            date: init_date,
+            timeZone: timezoneNumber,
+            width: "25%",
+            intervalUnit: Timeline.DateTime.DECADE,
+            intervalPixels: 100
+        }),
 
-      // Band 3
-      Timeline.createBandInfo({
-          eventSource: eventSource,
-          date: init_date,
-          timeZone: timezoneNumber,
-          width: "60%",
-          intervalUnit: Timeline.DateTime.DECADE,
-          multiple: 4,
-          intervalPixels: 40
-      })
-  ];
+        // Band 3 — the band the events are read on
+        Timeline.createBandInfo({
+            eventSource: eventSource,
+            date: init_date,
+            timeZone: timezoneNumber,
+            width: "60%",
+            intervalUnit: Timeline.DateTime.DECADE,
+            multiple: 4,
+            intervalPixels: 40
+        })
+    ];
 
-  // Make bands sync
-  bandInfos[1].syncWith = 0;
-  bandInfos[1].highlight = true;
-  bandInfos[2].syncWith = 0;
-  bandInfos[2].highlight = true;
+    // Make bands sync
+    for (var b = 1; b < bandInfos.length; b++) {
+        bandInfos[b].syncWith = 0;
+        bandInfos[b].highlight = true;
+    }
 
-  let tl = Timeline.create(document.getElementById("timeline"), bandInfos, Timeline.HORIZONTAL);
-  var base_url = '.';  // The base url for image, icon and background image references in the data
-  
-  // Load data
-  eventSource.loadJSON(tl_main, base_url);
+    let tl = Timeline.create(document.getElementById("timeline"), bandInfos, Timeline.HORIZONTAL);
+    var base_url = '.';  // The base url for image, icon and background image references in the data
 
-  tl.layout();  // display the Timeline
-  return tl;
+    // Load data: data/<lang>.js lists its event groups in `timelines`
+    // (older data files only defined a single `tl_main` group)
+    var groups = (typeof timelines !== "undefined") ? timelines :
+        (typeof tl_main !== "undefined") ? [tl_main] : [];
+    for (var i = 0; i < groups.length; i++) {
+        eventSource.loadJSON(groups[i], base_url);
+    }
+
+    tl.layout();  // display the Timeline
+    return tl;
 }

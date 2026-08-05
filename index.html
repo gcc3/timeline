@@ -1,6 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <head>
   <meta charset="UTF-8">
+  <!-- Must precede timeline-api.js: SimileAjax.History copies document.title
+       as it loads and restores that copy later, so an absent title wins. -->
+  <title>HISTORY TIMELINE</title>
   <link rel="stylesheet" href="styles.css">
   <script src="https://timeline-api.gcc3.com/timeline/2.3.1/timeline-api.js" type="text/javascript"></script>
   <script src="config.js" type="text/javascript"></script>

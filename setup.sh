@@ -22,6 +22,11 @@ for f in data/*.js; do
   lang="${lang%.js}"
   if [ -z "$langs" ]; then langs="\"$lang\""; else langs="$langs, \"$lang\""; fi
 done
-[ -n "$langs" ] || langs="\"en\""
+if [ -z "$langs" ]; then
+  # Without a data file the page loads no events and, because `title` is never
+  # defined, shows "[object HTMLDivElement]" instead of failing outright. Say so.
+  langs="\"en\""
+  echo "warning: data/ has no <lang>.js file — add one (e.g. data/en.js) or the page loads empty" >&2
+fi
 printf 'var langs = [%s];\n' "$langs" > langs.js
 echo "generated: langs.js [$langs]"

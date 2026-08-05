@@ -8,6 +8,12 @@ body:lang(ja) {
   font-family: Verdana, "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans CJK JP", sans-serif;
 }
 
+/* Times New Roman carries no CJK glyphs, so ja/zh fall through to the
+   platform serif face, which keeps the regional kanji shapes. */
+#title {
+  font-family: "Times New Roman", Times, serif;
+}
+
 #lang-switch {
   position: relative;
   font-size: x-small;
