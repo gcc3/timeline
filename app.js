@@ -85,18 +85,6 @@ function onDataLoaded() {
 
   document.getElementById("zoom-in").onclick = function () { zoomTimeline(true); };
   document.getElementById("zoom-out").onclick = function () { zoomTimeline(false); };
-
-  // iOS Safari zooms the page into small controls on quick taps (double-tap
-  // zoom, tiny-target disambiguation) instead of clicking them. Claim taps
-  // on the +/− buttons before Safari does and issue the click ourselves.
-  document.getElementById("zoom-buttons").addEventListener("touchend", function (e) {
-    var btn = e.target.closest ? e.target.closest("button") : null;
-    if (btn && e.cancelable) {
-      e.preventDefault();
-      btn.click();
-    }
-  }, { passive: false });
-
   updateScaleBar();
   initTouch();
 

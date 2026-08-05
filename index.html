@@ -1,6 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <head>
   <meta charset="UTF-8">
+  <!-- maximum-scale=1 forbids iOS Safari's automatic zoom-in on taps; without
+       a viewport the page renders as a scaled-down 980px desktop page and any
+       tap invites the browser to zoom into it -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <!-- Must precede timeline-api.js: SimileAjax.History copies document.title
        as it loads and restores that copy later, so an absent title wins. -->
   <title>TIMELINE</title>
