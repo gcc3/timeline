@@ -1,6 +1,5 @@
 config.js
-data.js
-data.*.js
+data/*.js
 data.xml
 langs.js
 .vscode
