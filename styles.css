@@ -9,6 +9,11 @@ body:lang(ja) {
   font-family: Verdana, "Hiragino Kaku Gothic ProN", "Yu Gothic", "Noto Sans CJK JP", sans-serif;
 }
 
+/* Links: black instead of the browser's blue/purple */
+a {
+  color: #000;
+}
+
 #loading {
   position: fixed;
   top: 0;
