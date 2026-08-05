@@ -81,6 +81,7 @@ function onDataLoaded() {
     menu.style.display = "none";
   });
 
+  patchEtherPainter();  // before the first paint inside tl_init
   tl = tl_init();
   updateGridDensity();  // match the year-line spacing to the initial scale
   tl.paint();
@@ -134,9 +135,44 @@ function zoomTimeline(zoomIn) {
 // config.js, so zooming just stretches the same lines apart until none is
 // on screen. Re-pick every band's marker interval for the current scale:
 // the finest "round" time span (1/2/5 steps, like the scale bar) that still
-// keeps neighbouring lines at least GRID_MIN_PX apart.
+// keeps neighbouring lines at least GRID_MIN_PX apart. MONTH is the finest
+// rung on purpose: day/week lines are more precision than these timelines'
+// events have.
 
 var GRID_MIN_PX = 64;
+
+// The library's paint() rounds the first marker down in the band's time
+// zone but steps to the following markers in UTC, so a month-wide step can
+// land on day 30/31 and drift through JS date normalization (duplicated and
+// skipped month labels). Same code, with time-zone-aware steps.
+function patchEtherPainter() {
+  Timeline.GregorianEtherPainter.prototype.paint = function () {
+    if (this._markerLayer) this._band.removeLayerDiv(this._markerLayer);
+    this._markerLayer = this._band.createLayerDiv(100);
+    this._markerLayer.setAttribute("name", "ether-markers");
+    this._markerLayer.style.display = "none";
+    if (this._lineLayer) this._band.removeLayerDiv(this._lineLayer);
+    this._lineLayer = this._band.createLayerDiv(1);
+    this._lineLayer.setAttribute("name", "ether-lines");
+    this._lineLayer.style.display = "none";
+
+    var date = this._band.getMinDate();
+    var maxDate = this._band.getMaxDate();
+    var timeZone = this._band.getTimeZone();
+    var labeller = this._band.getLabeller();
+    SimileAjax.DateTime.roundDownToInterval(
+      date, this._unit, timeZone, this._multiple, this._theme.firstDayOfWeek);
+    while (date.getTime() < maxDate.getTime()) {
+      this._intervalMarkerLayout.createIntervalMarker(
+        date, labeller, this._unit, this._markerLayer, this._lineLayer);
+      for (var i = 0; i < this._multiple; i++) {
+        SimileAjax.DateTime.incrementByInterval(date, this._unit, timeZone);
+      }
+    }
+    this._markerLayer.style.display = "block";
+    this._lineLayer.style.display = "block";
+  };
+}
 
 var gridRungs = null;  // built lazily: SimileAjax loads after this file
 
@@ -148,8 +184,6 @@ function getGridRungs() {
   // the multiple when rounding DECADE and up, so those lines would shift
   // around as the band scrolls.
   gridRungs = [
-    { unit: DT.DAY, multiple: 1 },
-    { unit: DT.WEEK, multiple: 1 },
     { unit: DT.MONTH, multiple: 1 },
     { unit: DT.MONTH, multiple: 3 },
     { unit: DT.MONTH, multiple: 6 }
