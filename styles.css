@@ -35,7 +35,9 @@ body:lang(ja) {
 }
 
 @keyframes loading-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 #lang-switch {
@@ -82,10 +84,50 @@ body:lang(ja) {
 }
 
 #timeline {
-  height: calc(100% - 60px);
+  height: calc(100% - 78px); /* leave room for the footer with the zoom control */
   -moz-user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
   user-select: none;
   -o-user-select: none;
+}
+
+#zoom-control {
+  margin-left: auto; /* right edge flush with the timeline's */
+  display: flex;
+  align-items: flex-start;
+  font-size: 10px;
+  color: #555;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#scale-bar {
+  text-align: center;
+  margin-right: 4px;
+}
+
+/* Bottom line with end ticks, like a map scale */
+#scale-line {
+  height: 2px;
+  margin: 1px auto 0;
+  border: 1px solid #555;
+  border-top: none;
+}
+
+#zoom-buttons {
+  display: flex;
+  align-self: center; /* vertically centered against the scale bar */
+}
+
+#zoom-buttons button {
+  padding: 0 4px;
+  background: none;
+  border: none;
+  color: #555;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
 }

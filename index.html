@@ -25,11 +25,25 @@
   </div>
 
   <div id="timeline" style="border: 1px solid #aaa; font-size: x-small;"></div>
-  <div style="font-size: x-small;margin-top: 3px">
-    powered by
-    <a href="https://simile.mit.edu/timeline/">
-      SIMILE
-    </a>
+  <div style="font-size: x-small; margin-top: 3px; display: flex; align-items: flex-start;">
+    <div>
+      powered by
+      <a href="https://simile.mit.edu/timeline/">
+        SIMILE
+      </a>
+    </div>
+
+    <!-- Map-style scale bar and zoom buttons; wired up in app.js -->
+    <div id="zoom-control">
+      <div id="scale-bar">
+        <div id="scale-label"></div>
+        <div id="scale-line"></div>
+      </div>
+      <div id="zoom-buttons">
+        <button id="zoom-in" type="button" title="Zoom in">+</button>
+        <button id="zoom-out" type="button" title="Zoom out">−</button>
+      </div>
+    </div>
   </div>
 </body>
 
