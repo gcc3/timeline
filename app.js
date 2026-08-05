@@ -82,6 +82,8 @@ function onDataLoaded() {
   });
 
   tl = tl_init();
+  updateGridDensity();  // match the year-line spacing to the initial scale
+  tl.paint();
 
   document.getElementById("zoom-in").onclick = function () { zoomTimeline(true); };
   document.getElementById("zoom-out").onclick = function () { zoomTimeline(false); };
@@ -123,8 +125,69 @@ function zoomTimeline(zoomIn) {
     tl.getBand(i).getEther()._pixelsPerInterval *= factor;
   }
   tl.getBand(0).setCenterVisibleDate(centerDate);  // synced bands follow
+  updateGridDensity();
   tl.paint();
   updateScaleBar();
+}
+
+// Each band's ether painter draws a vertical line every intervalUnit from
+// config.js, so zooming just stretches the same lines apart until none is
+// on screen. Re-pick every band's marker interval for the current scale:
+// the finest "round" time span (1/2/5 steps, like the scale bar) that still
+// keeps neighbouring lines at least GRID_MIN_PX apart.
+
+var GRID_MIN_PX = 64;
+
+var gridRungs = null;  // built lazily: SimileAjax loads after this file
+
+function getGridRungs() {
+  if (gridRungs) return gridRungs;
+  var DT = SimileAjax.DateTime;
+  // Years use YEAR with a multiple rather than DECADE/CENTURY: the library
+  // aligns YEAR multiples to the calendar (1995, 2000, ...), but ignores
+  // the multiple when rounding DECADE and up, so those lines would shift
+  // around as the band scrolls.
+  gridRungs = [
+    { unit: DT.DAY, multiple: 1 },
+    { unit: DT.WEEK, multiple: 1 },
+    { unit: DT.MONTH, multiple: 1 },
+    { unit: DT.MONTH, multiple: 3 },
+    { unit: DT.MONTH, multiple: 6 }
+  ];
+  for (var mag = 1; mag <= 1000000; mag *= 10) {
+    var steps = [1, 2, 5];
+    for (var s = 0; s < steps.length; s++) {
+      gridRungs.push({ unit: DT.YEAR, multiple: steps[s] * mag });
+    }
+  }
+  return gridRungs;
+}
+
+function updateGridDensity() {
+  var rungs = getGridRungs();
+  var unitLengths = SimileAjax.DateTime.gregorianUnitLengths;
+
+  for (var i = 0; i < tl.getBandCount(); i++) {
+    var band = tl.getBand(i);
+    var painter = band.getEtherPainter();
+    if (!painter || !("_unit" in painter)) continue;  // not a Gregorian painter
+
+    var ether = band.getEther();
+    var msPerPixel = (ether.pixelOffsetToDate(100).getTime() -
+                      ether.pixelOffsetToDate(0).getTime()) / 100;
+
+    // The finest rung whose lines stay at least GRID_MIN_PX apart
+    var pick = rungs[rungs.length - 1];
+    for (var r = 0; r < rungs.length; r++) {
+      if (unitLengths[rungs[r].unit] * rungs[r].multiple / msPerPixel >= GRID_MIN_PX) {
+        pick = rungs[r];
+        break;
+      }
+    }
+
+    painter._unit = pick.unit;
+    painter._multiple = pick.multiple;
+  }
 }
 
 function updateScaleBar() {
