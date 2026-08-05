@@ -96,6 +96,7 @@ a {
   -ms-user-select: none;
   user-select: none;
   -o-user-select: none;
+  touch-action: none; /* touches drive the timeline (app.js), not page scroll/zoom */
 }
 
 #zoom-control {
