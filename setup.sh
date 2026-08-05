@@ -6,6 +6,14 @@ cd "$(dirname "$0")"
 for example in *.example data/*.example; do
   [ -e "$example" ] || continue
   target="${example%.example}"
+  # A [placeholder] in the name means it is a template to copy by hand, not a
+  # file to materialize — data/[lang].js would register "[lang]" as a language.
+  case "$target" in
+    *'['*)
+      echo "skip: $target is a template — copy it to your own language code"
+      continue
+      ;;
+  esac
   if [ -e "$target" ]; then
     echo "skip: $target already exists"
   else
