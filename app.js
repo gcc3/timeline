@@ -100,7 +100,10 @@ function onDataLoaded() {
 // ---- Zoom control and map-style scale bar ----
 
 var ZOOM_STEP = 1.5;              // zoom factor per click
-var ZOOM_RANGE = [1 / 8, 8];      // clamp, relative to the scales in config.js
+// Clamp, relative to the scales in config.js; a timeline can override it by
+// defining zoom_range in its config.js (loaded before this file).
+if (typeof zoom_range === "undefined") var zoom_range = null;
+var ZOOM_RANGE = zoom_range || [1 / 8, 8];
 var SCALE_BAND = 2;               // the main event band drives the scale bar
 var SCALE_MAX_PX = 120;           // the scale line never grows beyond this
 var MS_PER_YEAR = 365.2425 * 24 * 60 * 60 * 1000;
