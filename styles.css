@@ -1,6 +1,7 @@
 body {
   font-family: Verdana, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   height: 100%;
+  margin: 0;
 }
 
 /* Japanese UI prefers Japanese fonts for kanji glyph shapes */
