@@ -9,9 +9,21 @@ function setLang(lang) {
   location.reload();
 }
 
-// Resolve current language; its data file (data/<lang>.js) is loaded in onLoad
+// First supported language among the browser's preferred ones, or null
+function getBrowserLang() {
+  var candidates = navigator.languages || [navigator.language || ''];
+  for (var i = 0; i < candidates.length; i++) {
+    var code = candidates[i].toLowerCase().split('-')[0];
+    if (langs.indexOf(code) !== -1) return code;
+  }
+  return null;
+}
+
+// Resolve current language: stored preference, then browser language, then
+// English. Its data file (data/<lang>.js) is loaded in onLoad.
 if (typeof langs === 'undefined') var langs = ['en'];  // normally defined in langs.js (run setup.sh)
 var lang = getLang();
+if (langs.indexOf(lang) === -1) lang = getBrowserLang();
 if (langs.indexOf(lang) === -1) lang = 'en';
 document.documentElement.lang = lang;
 

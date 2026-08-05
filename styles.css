@@ -1,7 +1,7 @@
 body {
   font-family: Verdana, "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
   height: 100%;
-  margin: 0;
+  margin: 0 8px;
 }
 
 /* Japanese UI prefers Japanese fonts for kanji glyph shapes */
@@ -110,10 +110,14 @@ body:lang(ja) {
   margin-right: 4px;
 }
 
+#scale-label {
+  line-height: 1; /* keep the label tight against the scale line below */
+}
+
 /* Bottom line with end ticks, like a map scale */
 #scale-line {
   height: 2px;
-  margin: 1px auto 0;
+  margin: 0 auto;
   border: 1px solid #555;
   border-top: none;
 }
