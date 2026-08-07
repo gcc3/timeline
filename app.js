@@ -27,6 +27,19 @@ if (langs.indexOf(lang) === -1) lang = getBrowserLang();
 if (langs.indexOf(lang) === -1) lang = 'en';
 document.documentElement.lang = lang;
 
+var loadingTexts = {
+  en: "Loading...",
+  ja: "読み込み中...",
+  zh: "加载中..."
+};
+
+// Called from an inline script right after #loading in index.html, so the
+// localized text is in place before the loading screen's first paint
+function setLoadingText() {
+  var el = document.getElementById("loading-text");
+  if (el) el.innerText = loadingTexts[lang] || loadingTexts.en;
+}
+
 var tl = null;
 function onLoad() {
   // The data file can be large, so load it asynchronously: the loading screen

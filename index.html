@@ -20,8 +20,9 @@
        built; removed at the end of onDataLoaded() in app.js. -->
   <div id="loading">
     <div id="loading-spinner"></div>
-    <div>Loading...</div>
+    <div id="loading-text">Loading...</div>
   </div>
+  <script type="text/javascript">setLoadingText();</script>
 
   <!-- padding, not margin: a margin here would collapse through body's top
        edge and push the whole page 10px down, causing a vertical scrollbar -->
